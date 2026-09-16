@@ -69,7 +69,26 @@ Sobe em `PORT` (default **8082** internamente no container; host-exposto na port
 **7055** via `docker-compose.yml` da raiz — próxima livre na faixa 7050+ do monorepo).
 
 MongoDB local sobe via `docker-compose.yml` na raiz do monorepo, host-exposto na porta
-**7054** — passe `MONGODB_URI=mongodb://localhost:7054/notes` pra rodar fora do Docker.
+**7054**, protegido por usuário/senha (`MONGO_INITDB_ROOT_USERNAME`/`PASSWORD`, default
+`root`/`MyS3cur3M0ngoPassw0rd2026!`) — passe
+`MONGODB_URI="mongodb://root:MyS3cur3M0ngoPassw0rd2026!@localhost:7054/notes?authSource=admin"`
+pra rodar fora do Docker. **`authSource=admin` é obrigatório** — o usuário root é criado
+no banco `admin` (não em `notes`), sem esse parâmetro a autenticação falha mesmo com
+usuário/senha corretos.
+
+As credenciais só são criadas automaticamente pelo Mongo em **volume vazio** — se o
+volume `.mongodata/` da raiz já existir sem auth configurada (caso já tenha rodado o
+compose antes dessa mudança), crie o usuário manualmente antes de exigir `--auth`:
+
+```bash
+docker exec workbox-mongo mongosh --quiet --eval "
+db.getSiblingDB('admin').createUser({
+  user: 'root',
+  pwd: 'MyS3cur3M0ngoPassw0rd2026!',
+  roles: [{ role: 'root', db: 'admin' }]
+})
+"
+```
 
 CORS: `cors.allowed-origins` (default `http://localhost:7053,http://127.0.0.1:7053`,
 mesma origem do `workbox-app` em dev) via Spring Security nativo.
