@@ -65,8 +65,8 @@ tem que bater com uma linha ativa em `workbox.api_clients`). Peça um token no
 ./gradlew bootRun --args='--spring.profiles.active=test'   # sem dependência externa (endpoints web-only)
 ```
 
-Sobe em `PORT` (default **8082** internamente no container; host-exposto na porta
-**7055** via `docker-compose.yml` da raiz — próxima livre na faixa 7050+ do monorepo).
+Sobe em `PORT` (default **7055** rodando local; no container o compose força **8082**,
+exposto no host em **7055** via `docker-compose.yml` da raiz).
 
 MongoDB local sobe via `docker-compose.yml` na raiz do monorepo, host-exposto na porta
 **7054**, protegido por usuário/senha (`MONGO_INITDB_ROOT_USERNAME`/`PASSWORD`, default
@@ -105,7 +105,7 @@ git diff openapi/openapi.yaml
 ## Convenção de commits
 
 Sempre em português (pt-BR), Conventional Commits com o prefixo de tipo em inglês — regra
-completa em [AGENTS.md](../AGENTS.md#convenção-de-mensagens-de-commit).
+completa em [CLAUDE.md](../CLAUDE.md#convenção-de-mensagens-de-commit).
 
 ## Testes
 
