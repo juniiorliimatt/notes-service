@@ -51,7 +51,7 @@ Rota única: `/api/v1/documents` (`GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELE
 - CORS: `cors.allowed-origins` (default `http://localhost:7053`) via Spring Security.
 - O profile `dev` expõe `stacktrace`/`exception` nas respostas de erro
   (`server.error.include-*`) — conveniência local; `prod` não. Não copiar pra `prod`.
-- Sem `.gitlab-ci.yml` e sem Sonar ainda; sem Cucumber. Ao evoluir, alinhar ao padrão do
+- CI com `test` → `contract-drift-check` → `build`; ainda sem Sonar nem Cucumber. Ao evoluir, alinhar ao padrão do
   `workbox-api`/`budget-service`.
 
 ## Convenção Java deste repo
@@ -69,7 +69,7 @@ Rota única: `/api/v1/documents` (`GET`, `GET /{id}`, `POST`, `PUT /{id}`, `DELE
 
 ## Contrato (OpenAPI)
 `openapi/openapi.yaml` versionado. Mudou rota/DTO/auth → `./gradlew generateOpenApiDocs`
-e commitar junto. Como não há CI aqui, o drift **não** é detectado automaticamente.
+e commitar junto (o `contract-drift-check` do CI falha se divergir).
 O front ainda não consome este serviço (nem `vite.config.ts` nem `nginx.conf.template`
 roteiam `/api/v1/documents`).
 
